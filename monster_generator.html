@@ -1,0 +1,904 @@
+<html>
+    <head>
+    
+    </head>
+    
+    <body>
+        <button onclick="Function()">Try it</button>
+
+        <p id="demo"></p>
+        <script>
+            
+            function Function(){
+                monsterGenerator(10);
+            }
+            function monsterGenerator(monLvl, monOri, monTyp, monCls, monRar){
+                var monsterName ="";
+                var monsterOrigin = monOri || randInt(0,8);
+                var monsterType = monTyp || randInt(0,4);
+                var monsterClass = monCls || randInt(0,3);
+                var monsterLevel = monLvl;
+                
+                if (monRar!= null){
+                    monsterRarity = monRar;
+                }else{
+                    if (coinFlip(0.001)){
+                        var monsterRarity = 4;
+                    }
+                    else if (coinFlip(0.00100)){
+                        var monsterRarity = 3;
+                    }
+                    else if (coinFlip(0.10)){
+                        var monsterRarity = 2;
+                    }
+                    else if (coinFlip(0.30)){
+                        var monsterRarity = 1;
+                    }
+                    else{
+                        var monsterRarity = 0;
+                    }
+                }
+                
+                console.log("class: " + monsterRarity);
+                var bsStat = getBaseStats(monsterType, monsterClass, monsterRarity, monsterLevel);
+                var monDesc = getDescription(monsterOrigin, monsterType, monsterClass, monsterRarity);
+                
+                monsterName = getNameAndID(monsterOrigin, monsterType, monsterClass, monsterRarity);
+                var monsterId = monsterName.id;
+                monsterName = monsterName.name;
+                
+                monsterId = monsterId + "/" + monsterOrigin + "-" + monsterType + "-" + monsterClass + "-" + monsterRarity + "/" + monDesc.id;
+                
+                monsterOrigin = getStats("origin", monsterOrigin);
+                monsterType = getStats("type", monsterType);
+                monsterRarity = getStats("rarity", monsterRarity);
+                monsterClass = getStats("class", monsterClass);
+                
+                
+                
+                document.getElementById("demo").innerHTML =
+                    "ID: " + monsterId + "<br>" +
+                    "Name: " + monsterName + "<br><br>" + 
+                    "Rarity: " + monsterRarity + "<br>" +
+                    "Type: " + monsterType + "<br>" +
+                    "Origin: " + monsterOrigin + "<br>" +
+                    "Class: " + monsterClass + "<br><br>" +
+                    "--------DESCRIPTION--------" + "<br><br>" +
+                    monDesc.desc + "<br><br>" +
+                    "-----------STATS-----------" + "<br>" +
+                    "HP: "+ bsStat.health +"<br>" +
+                    "ATK: "+ bsStat.attack +"<br>" +
+                    "DEF: "+ bsStat.defense +"<br>" +
+                    "SPD: "+ bsStat.speed +"<br>" +
+                    "ATKSPD: "+ bsStat.atSpeed +"<br>" +
+                    "CRITICAL: "+ bsStat.critical +"<br>"; 
+            }
+            
+            function isConsonant(str1){
+                
+                var vowel_list = 'aeiouAEIOU';
+                var lastChar = str1[str1.length -1];
+                
+                if (vowel_list.indexOf(lastChar) == -1)
+                {
+                    return true;
+                }
+                    return false; 
+            }
+            
+            function randInt(min, max){
+                    return Math.floor(Math.random() * (max - min + 1) ) + min;     
+            }
+            
+            
+            function getRarityLvl(rarNum, curName){
+                var a = isConsonant(curName);
+                var i;
+                    switch(rarNum){
+                    case 0:
+                    i = randInt(0,2);
+                        if(i==0&&a==0){
+                          return {val: "dan", val2: i};
+                        }else if(i==1&&a==0){
+                            return {val: "an", val2: i};
+                        }else{
+                            return {val: "n", val2: i};
+                        }
+                    break;
+                    case 1:
+                    i = randInt(0,2);
+                        if(i==0&&a==1){
+                          return {val: "ri", val2: i};
+                        }else if(i==1&&a==1){
+                           return {val: "r", val2: i};
+                        }else{
+                            return {val: "i", val2: i};
+                        }
+                    break;
+                    case 2:
+                    i = randInt(0,2);
+                        if(i==0){
+                          return {val: "if", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "f", val2: i};
+                        }else{
+                            return {val: "ip", val2: i};
+                        }
+                    break;
+                    case 3:
+                    i = randInt(0,2);
+                        if(i==0&&a==1){
+                          return {val: "qi", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "q", val2: i};
+                        }else{
+                            return {val: "iq", val2: i};
+                        }
+                    break;
+                    case 4:
+                    i = randInt(0,2);
+                        if(i==0&&a==0){
+                          return {val: "vet", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "ve", val2: i};
+                        }else{
+                            return {val: "et", val2: i};
+                        }
+                    break;
+                }
+            
+            }
+            
+            function getClass(clsNum, curName){
+                
+                var a = isConsonant(curName);
+                var i;
+                
+                switch(clsNum){
+                    case 0:
+                    i = randInt(0,3);
+                        if(i==0&&a==0){
+                          return {val: "or", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "ker", val2: i};
+                        }else if(i==2&&a==0){
+                            return {val: "er", val2: i};
+                        }else{
+                            return {val: " the Worker", val2: i};
+                        }
+                    break;
+                    case 1:
+                    i = randInt(0,3);
+                        if(i==0&&a==0){
+                          return {val: "on", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "nor", val2: i};
+                        }else if(i==2&&a==0){
+                            return {val: "al", val2: i};
+                        }else{
+                            return {val: "", val2: i};
+                        }
+                    break;
+                    case 2:
+                    i = randInt(0,3);
+                        if(i==0&&a==1){
+                          return {val: "sca", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "nser", val2: i};
+                        }else if(i==2&&a==1){
+                            return {val: "van", val2: i};
+                        }else{
+                            return {val: " the Scavenger", val2: i};
+                        }
+                    break;
+                    case 3:
+                    i = randInt(0,3);
+                        if(i==0&&a==1){
+                          return {val: "th", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "thi", val2: i};
+                        }else if(i==2&&a==1){
+                            return {val: "ef", val2: i};
+                        }else{
+                            return {val: " the Thief", val2: i};
+                        }
+                    break;
+                }
+            }
+            
+            function getOrigin(oriNum){
+                
+                var i;
+                
+                switch(oriNum){
+                    case 0:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "S", val2: i};
+                            }else{
+                                console.log(i);
+                                return {val: "St", val2: 1};               
+                            }
+                    break;
+                    case 1:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "Sto",i};
+                            }else{
+                                return {val: "Ste",};
+                            }
+                    break;
+                    case 2:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "E", val2: i};
+                            }else{
+                                return {val: "En", val2: "1"};
+                            }
+                    break;
+                    case 3:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "Fr", val2: i};
+                            }else{
+                                return {val: "Fra", val2: i};
+                            }
+                    break;
+                    case 4:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "E", val2: i};
+                            }else{
+                                return {val: "Ey", val2: i};
+                            }
+                    break;
+                    case 5:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "Gr", val2: i};
+                            }else{
+                                return {val: "Go", val2: i};
+                            }
+                    break;
+                    case 6:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "U", val2: i};
+                            }else{
+                                return {val: "Uw", val2: i};
+                            }
+                    break;
+                    case 7:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "Yr", val2: i};
+                            }else{
+                                return {val: "Yre", val2: i};
+                            }
+                    break;
+                    case 8:
+                        i = randInt(0,1);
+                            if(i==0){
+                              return {val: "An", val2: i};
+                            }else{
+                               return {val: "Ance", val2: i};
+                            }
+                    break;
+                }
+            }
+            
+            function getType(typNum, curName){
+                
+                var a = isConsonant(curName);
+                var i;
+                
+                switch(typNum){
+                    case 0:
+                    i = randInt(0,3);
+                        if(i==0&&a==1){
+                          return {val: "be", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "bea", val2: i};
+                        }else if(i==2&&a==1){
+                            return {val: "beas", val2: i};
+                        }else{
+                            return {val: "ast", val2: i};
+                        }
+                    break;
+                    case 1:
+                    i = randInt(0,2);
+                        if(i==0&&a==1){
+                          return {val: "dr", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "dra", val2: i};
+                        }else{
+                            return {val: "rag", val2: i};
+                        }
+                    break;
+                    case 2:
+                    i = randInt(0,2);
+                        if(i==0&&a==1){
+                          return {val: "py", val2: i};
+                        }else{
+                            return {val: "ire", val2: i};
+                        }
+                    break;
+                    case 3:
+                    i = randInt(0,2);
+                        if(i==0&&a==1){
+                          return {val: "wy", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "wyr", val2: i};
+                        }else{
+                            return {val: "ur", val2: i};
+                        }
+                    break;
+                    case 4:
+                    i = randInt(0,2);
+                        if(i==0&&a==1){
+                          return {val: "fi", val2: i};
+                        }else if(i==1&&a==1){
+                            return {val: "fie", val2: i};
+                        }else{
+                            return {val: "ien", val2: i};
+                        }
+                    break;
+                }
+            }
+            
+            
+            function getStats(type, value){
+                
+                if(type=="origin"){
+                    
+                    switch(value){
+                        case 0:
+                        return "Storia";
+                        break;
+                        case 1:
+                        return "Stoenl Lake";
+                        break;
+                        case 2:
+                        return "Ensfield";
+                        break;
+                        case 3:
+                        return "Framces";
+                        break;
+                        case 4:
+                        return "Eyburg";
+                        break;
+                        case 5:
+                        return "Grodon";
+                        break;
+                        case 6:
+                        return "Uwuis";
+                        break;
+                        case 7:
+                        return "Yrestin";
+                        break;
+                        case 8:
+                        return "Ancerith";
+                        break;
+                    }
+
+                }else if(type=="type"){
+                    
+                    switch(value){
+                        case 0:
+                        return "Beast";
+                        break;
+                        case 1:
+                        return "Dragon";
+                        break;
+                        case 2:
+                        return "Pyro";
+                        break;
+                        case 3:
+                        return "Wyrm";
+                        break;
+                        case 4:
+                        return "Fiend";
+                        break;
+                    }
+
+                    
+                }else if(type=="rarity"){
+                    
+                    switch(value){
+                        case 0:
+                        return "Common";
+                        break;
+                        case 1:
+                        return "Uncommon";
+                        break;
+                        case 2:
+                        return "Rare"; 
+                        break;
+                        case 3:
+                        return "Legendary";
+                        break;
+                        case 4:
+                        return "Exotic";
+                        break;
+                    }
+                    
+                }else if(type=="class"){
+                    
+                    switch(value){
+                        case 0:
+                        return "Worker";
+                        break;
+                        case 1:
+                        return "Normal";
+                        break;
+                        case 2:
+                        return "Scavenger";
+                        break;
+                        case 3:
+                        return "Thief";
+                        break;
+                        }                    
+                }
+                
+            }
+            
+            function getBaseStats(type,cls,rarity,level){
+                var HP = randInt(1,10);
+                var atk = randInt(1,10);
+                var def = randInt(1,10);
+                var spd = randInt(1,10);
+                var spAtk = randInt(1,10);
+                var crit = randInt(1,10);
+                
+                switch(type){
+                        case 0:
+                            //beast
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                                HP=HP+5;
+                                atk=atk+5;    
+                                def=def+6
+                                spd=spd+3;
+                                spAtk=spAtk+5;
+                                crit=crit+7;
+                                
+                            }
+                            
+                        break;
+                        case 1:
+                            //dragon
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                                HP=HP+6;
+                                atk=atk+7; 
+                                def=def+9;
+                                spd=spd+6;
+                                spAtk=spAtk+4;
+                                crit=crit+7;
+                                
+                            }
+                        break;
+                        case 2:
+                            //pyro
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                                HP=HP+3;
+                                atk=atk+5;
+                                def=def+1;
+                                spd=spd+9;
+                                spAtk=spAtk+8;
+                                crit=crit+7;
+                                
+                            }
+                        break;
+                        case 3:
+                            //wyrm
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                                HP=HP+2;
+                                atk=atk+5; 
+                                def=def+8;
+                                spd=spd+8;
+                                spAtk=spAtk+7;
+                                crit=crit+4;
+                                
+
+                            }
+                        break;
+                        case 4:
+                            //fiend
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                                HP=HP+4;
+                                atk=atk+5;
+                                def=def+6;
+                                spd=spd+3;
+                                spAtk=spAtk+6;
+                                crit=crit+4;
+                                
+                                
+                            }
+                        break;
+                }
+                
+                switch(cls){
+                        case 0:
+                            //worker
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                            HP=HP+7;
+                            atk=atk+2;
+                            def=def+2;
+                            spd=spd+2;
+                            spAtk=spAtk+2;
+                            crit=crit+2;
+                            
+                            }
+                        break;
+                        case 1:
+                            //normal
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                            HP=HP+5;
+                            atk=atk+5;    
+                            def=def+5;
+                            spd=spd+5;
+                            spAtk=spAtk+5;
+                            crit=crit+5;
+                            
+                            }
+                        break;
+                        case 2:
+                            //scavanger
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                            HP=HP+10;
+                            atk=atk+5;
+                            def=def+6;
+                            spd=spd+4;
+                            spAtk=spAtk+5;
+                            crit=crit+4;
+                            
+                            }
+                        break;
+                        case 3:
+                            //thief
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                            HP=HP+4;
+                            atk=atk+5;   
+                            def=def+6;
+                            spd=spd+8;
+                            spAtk=spAtk+3;
+                            crit=crit+5;
+                            
+                            }
+                        break;
+                }
+                        
+                switch(rarity){
+                        case 0:
+                            //common
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                                HP=HP+3;
+                                atk=atk-7;    
+                                def=def-7;
+                                spd=spd-7;
+                                spAtk=spAtk-7;
+                                crit=crit-7;
+                            //return {health: HP, attack: atk, defend: def, speed: spd, atSpeed: spAtk, critical: crit };
+                            }
+                        break;
+                        case 1:
+                            //uncummon
+                            if(HP<20||atk<20||def<20||spd<20||spAtk<20||crit<20){
+                                HP=HP+5;
+                                atk=atk+3;    
+                                def=def+3;
+                                spd=spd+3;
+                                spAtk=spAtk+3;
+                                crit=crit+3
+                                //return {health: HP, attack: atk, defend: def, speed: spd, atSpeed: spAtk, critical: crit };
+                            }
+                        break;
+                        case 2:
+                            //rare
+                            if(HP<25||atk<25||def<25||spd<25||spAtk<25||crit<25){
+                                HP=HP+7;
+                                atk=atk+6;
+                                def=def+6;
+                                spd=spd+6
+                                spAtk=spAtk+6;
+                                crit=crit+6;
+                                //return {health: HP, attack: atk, defend: def, speed: spd, atSpeed: spAtk, critical: crit };
+                            }
+                        break;
+                        case 3:
+                            //legedary
+                            if(HP<30||atk<30||def<30||spd<30||spAtk<30||crit<30){
+                                HP=HP+10;
+                                atk=atk+7;    
+                                def=def+7;
+                                spd=spd+7;
+                                spAtk=spAtk+7;
+                                crit=crit+7;
+                                //return {health: HP, attack: atk, defend: def, speed: spd, atSpeed: spAtk, critical: crit };
+                            }
+                        break;
+                        case 4:
+                            //exotic
+                            if(HP<40||atk<40||def<40||spd<40||spAtk<40||crit<40){
+                                HP=HP+30;
+                                atk=atk+10; 
+                                def=def+10;
+                                spd=spd+10;
+                                spAtk=spAtk+10;
+                                crit=crit+10;
+                                //return {health: HP, attack: atk, defend: def, speed: spd, atSpeed: spAtk, critical: crit };
+                            }
+                        break;
+                }
+                var x = realStats(HP,atk,def,spd,spAtk,crit,level,rarity);
+                return {health: x.health, attack: x.attack, defense: x.defend, speed: x.speed, atSpeed: x.atSpeed, critical: x.critical };
+            }
+            
+            function coinFlip(val){
+                return Math.random() < val;
+            }
+            
+            function realStats(hp, atk, def, spd, aspd, crit, level, rarity){
+                var tostat = hp+atk+def+spd+aspd+crit;
+                var hp= (((((hp + tostat) * 2 * level / 100)) + level + Math.pow(10,rarity)) + Math.pow(10,rarity) + (level * 100));
+                var atk= (((atk + tostat) * 2 * level / 100)) + level + rarity;
+                var def= (((def + tostat) * 2 * level / 100)) + level + rarity;
+                var spd= (((spd + tostat) * 2 * level / 100)) + level + rarity;
+                var aspd= (((aspd + tostat) * 2 * level / 100)) + level + rarity;
+                var crit= (((crit + tostat) * 2 * level / 100)) + level + rarity;
+                return {health: Math.round(hp), attack: Math.round(atk), defend: Math.round(def), speed: Math.round(spd), atSpeed: Math.round(aspd), critical: Math.round(crit) };
+            }
+            
+            function getNameAndID(origin, type, rarity, cls){
+                var monsterName = "";
+                var a, b, c, d;
+                a = getOrigin(origin);
+                monsterName = a.val;
+                b = getType(type,monsterName);
+                monsterName += b.val;
+                c = getRarityLvl(rarity,monsterName);
+                monsterName += c.val;
+                d = getClass(cls,monsterName);
+                monsterName += d.val;
+                if(a.val2 != null){
+                return {name: monsterName, id: "" + a.val2 + "-" + b.val2 + "-" + c.val2 + "-" + d.val2};
+                }else{
+                return {name: monsterName, id: "" + "1-" + b.val2 + "-" + c.val2 + "-" + d.val2};
+                }
+            }
+            
+            function getDescription(ori, typ, clsVal, rar){
+                var id ="";
+                var origin = ori;
+                var type = clsVal;
+                var cls = typ;
+                var rarity = rar;
+                
+                var classBank = [0,1,2,3,4];
+                classBank[0] = ["00creature", "01monster", "02little devil"];
+                classBank[1] =["10dragon", "11unknown flying beast", "12flying monster"];
+                classBank[2] =["20fiery beast", "21evil spirit", "22unknown monster"];
+                classBank[3] =["30flying lizard", "31winged lizard", "32wyvern"];
+                classBank[4] =["40ogre like monster", "41savage creature", "42monster"];
+                
+                var oriBank = ["0Storia", "1Stoenl Lake", "2Ensfield",  "3Framces", "4Eyburg", "5Grodon", "6Uwuis", "7Yrestin", "8Ancerith"];
+                var typeBank = ["0worker", "1normal", "2scavenger", "3thief"];
+                
+                var rarBank = ["0oftenly", "1occasionally", "2rarely", "3never"];
+                var likeBank = ["0love", "1like", "2really like", "3really fond of"];
+                var hateBank = ["0hates", "1dislikes", "2despise", " 3gets angry when he sees" ];
+                var conjBank = ["0some", "1a few", "2a miniscule amount of ", "3all"]
+                
+                var adjBank =[0,1];
+                adjBank[0] = ["00brave", "01calm", "02kind", "03witty", "04energetic"];
+                adjBank[1] = ["10fierce", "11nasty", "12wicked", "13obnoxius", "14cynical"];
+                
+                var placeBank = ["0alleyway", "1village", "2nearby town ", "3small homes", "4tavern", "5river", "6whole town"];
+                var peopleBank = ["0tavern owner", "1traveller", "2knight", "3townie"];
+                var nounBank = ["0silver coins","1bronze coins","2gold coins", "3apples", "4beer", "5weapons", "6books"];
+                var verbBank = ["0raided", "1killed", "2disturbed", "3jaywalked", "4burned", "5attacked", "6destroyed"];
+                
+                var seenBank =["0noticed", "1spotted", "2sighted", "3recognized", "4gazed"];
+                
+                
+                
+                var x = verbBank[randInt(0,verbBank.length-1)]
+                var verb =x.slice(0,x.length-2);
+                
+                var desc0 = "This " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + ", " +
+                    rarBank[rarity] + " " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " " + 
+                    verbBank[randInt(0,6)] + " some " + 
+                    peopleBank[randInt(0,3)] + " near the " + 
+                    placeBank[randInt(0,6)] + ". he " + 
+                    likeBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " " +
+                    nounBank[randInt(0,nounBank.length-1)]+ " and " + 
+                    hateBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " " + 
+                    nounBank[randInt(0,nounBank.length-1)] + ".";
+                
+                var desc1 = 
+                    rarBank[rarity] + " " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " " + 
+                    verb + "ing" + " some " + 
+                    peopleBank[randInt(0,peopleBank.length-1)] + "s " + "in a remote  " + 
+                    placeBank[randInt(0,placeBank.length-1)] + ". " + " beware of this " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + ", " + " cause he might " + 
+                    rarBank[rarity] + " " + 
+                    verb + " your " + 
+                    nounBank[randInt(0,nounBank.length-1)] +".";
+                
+                var desc2 = "A long time ago in an old " + 
+                    placeBank[randInt(0,placeBank.length-1)] + ", lives a " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + ". then a one unfortunate day comes, a " + 
+                    peopleBank[randInt(0,peopleBank.length-1)] + " " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " the " + 
+                    classBank[cls][randInt(0,2)] + " " + 
+                    verb + "ing the " + 
+                    nounBank[randInt(0,nounBank.length-1)] + ". In his anger he banished the witty " + 
+                    classBank[cls][randInt(0,2)] + " and never turned back again.";
+                
+                var desc3 = "A " + 
+                    typeBank[type] + " type, " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + ", " + 
+                    rarBank[rarity] + " " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " near " + 
+                    oriBank[origin] + ".";
+                
+                var desc4 = "A " + 
+                    typeBank[type] + " type, " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + ". " + 
+                    rarBank[rarity] + " " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " near " + 
+                    oriBank[origin] + ", this " + 
+                    classBank[cls][randInt(0,2)] + " " +
+                    likeBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " " +
+                    nounBank[randInt(0,nounBank.length-1)]+ " and " + 
+                    hateBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " fake " + 
+                    nounBank[randInt(0,nounBank.length-1)] + ".";
+                
+                var desc5 = "A " + 
+                    typeBank[type] + " type, " +  
+                    rarBank[rarity] + " " + 
+                    seenBank[randInt(0,seenBank.length-1)] + ", " +
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + " near " + 
+                    oriBank[origin] + ".";
+                
+                
+                var desc6 = "A " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + " usually " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " " + 
+                    verb + "ing some " + 
+                    peopleBank[randInt(0,peopleBank.length-1)] +"'s in their " + 
+                    placeBank[randInt(0,placeBank.length-1)] + ".";
+                
+                var desc7 = "A " + 
+                    typeBank[type] + " type, " +  
+                    rarBank[rarity] + " " + 
+                    seenBank[randInt(0,seenBank.length-1)] + ", " +
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + " near " + 
+                    oriBank[origin] + ". This " + 
+                    classBank[cls][randInt(0,2)] + ", " +
+                    likeBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " " +
+                    nounBank[randInt(0,nounBank.length-1)]+ " and " + 
+                    hateBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " " + 
+                    nounBank[randInt(0,nounBank.length-1)] + ".";
+                
+                var desc8 = "A " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + " usually " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " " + 
+                    verb + "ing some " + 
+                    peopleBank[randInt(0,peopleBank.length-1)] +"'s in the " + 
+                    placeBank[randInt(0,placeBank.length-1)] + ", this " + 
+                    classBank[cls][randInt(0,2)] + " " +
+                    likeBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " " +
+                    nounBank[randInt(0,nounBank.length-1)]+ " and " + 
+                    hateBank[randInt(0,3)] + " " + 
+                    conjBank[randInt(0,conjBank.length-1)] + " " + 
+                    nounBank[randInt(0,nounBank.length-1)] + ".";
+                
+                var desc9 = "A " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + " usually " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " " + 
+                    verb + "ing some " + 
+                    nounBank[randInt(0,nounBank.length-1)] +" in the " + 
+                    placeBank[randInt(0,placeBank.length-1)] + ".";
+                
+                var desc10 = "A " + 
+                    adjBank[randInt(0,adjBank.length-1)][randInt(0,adjBank.length-1)] + " " + 
+                    classBank[cls][randInt(0,2)] + " usually " + 
+                    seenBank[randInt(0,seenBank.length-1)] + " " + 
+                    verb + "ing some " + 
+                    nounBank[randInt(0,nounBank.length-1)] +" in " + 
+                    oriBank[origin] + ".";
+                
+          
+                
+                var storySelect = randInt(0,10);
+                
+                switch(storySelect){
+                    case 0:
+                        id = desc0.match(/[0-9]/g);
+                        var id2 = id[0] + id[1] + "-" + id[2] + id[3] + "-" + id.slice(3)+"-0";  
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc0.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 1:
+                        id = desc1.match(/[0-9]/g);
+                        var id2 = id.slice(0,5) + "-" + id[5] + id[6] +"-"+ id[7] + id[8] + "-" + id.slice(9,id.length)+"-1";
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc1.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 2 :
+                        id = desc2.match(/[0-9]/g);
+                        var id2 = id[0] + "-" + id[1] + id[2] +"-"+ id[3] + id[4] + "-" + id[5] +"-"+ id[6] + "-" + id[7] + id[8] + "-" + id[9] +"-"+ id[10] + "-" + id[11] + id[12] + "-2";
+                        return {desc: desc2.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 3 :
+                        id = desc3.match(/[0-9]/g);
+                        var id2 = id[0] + "-" + id[1] + id[2] + "-" + id[3] + id[4] + "-" + id[5] + "-" + id[6] + "-3";
+                        return {desc: desc3.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 4 :
+                        id = desc4.match(/[0-9]/g);
+                        var id2 = id[0] + "-" + id[1] + id[2] + "-" + id[3] + id[4] + "-" + id[5] + "-" + id[6] + "-" + id[7] + "-" + id[8] + id.slice(9, id.length) + "-4"
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc4.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 5 :
+                        id = desc5.match(/[0-9]/g);
+                        var id2 = id[0] + "-" + id[1] + "-" + id[2] +"-"+ id[3] + id[4] + "-" + id[5] + id[6] + "-" + id[7] + "-5";
+                        return {desc: desc5.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 6 :
+                        id = desc6.match(/[0-9]/g);
+                        var id2 = id[0] + id[1] + "-" + id[2] + id[3] + "-" + id.slice(4)+"-6";
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc6.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 7 :
+                        id = desc7.match(/[0-9]/g);
+                        var id2 = id[0] + "-" + id[1] + "-" + id[2] + "-" + id[3] + id[4] + "-" + id[5] + id[6] + "-" + id[7] + "-" + id[8] + id[9] + "-" + id.slice(10, id.length) + "-7";
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc7.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 8 :
+                        id = desc8.match(/[0-9]/g);
+                        var id2 = id[0] + id[1] +"-"+ id[2] + id[3] +"-"+ id.slice(4,8) + "-" + id[8] + id[9] + "-" + id.slice(10, id.length) + "-8";
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc8.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    case 9 :
+                        id = desc9.match(/[0-9]/g);
+                        var id2 = id[0] + id[1] + "-" + id[2] + id[3] + "-" + id.slice(4)+"-9"
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc9.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                    default :
+                        id = desc10.match(/[0-9]/g);
+                        var id2 = id[0] + id[1] + "-" + id[2] + id[3] + "-" + id.slice(4)+"-10"
+                        id2 = id2.replace(/,/g,"-");
+                        return {desc: desc10.replace(/[0-9]/g, ""), id: id2};
+                        break;
+                }
+                
+            }
+        </script>
+    </body>
+</html>
